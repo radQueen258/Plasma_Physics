@@ -50,10 +50,10 @@ public class Main {
         for (double currentTime = 0; currentTime <= timeEnd;
              currentTime += tau) {
 //                Choose your solver:
-            HeatConduction.solveImplicit(n, h, x, A, B, C, F, mu1, kappa1, mu2, kappa2,
-                    lambda, y, tau, y_old);
+//            HeatConduction.solveImplicit(n, h, x, A, B, C, F, mu1, kappa1, mu2, kappa2,
+//                    lambda, y, tau, y_old);
 
-//            HeatConduction.solveExplicit(n, h, lambda, y, tau, y_old);
+            HeatConduction.solveExplicit(n, h, lambda, y, tau, y_old);
 
 //               Save results at spec. times
             if (Math.abs(currentTime - 3000) < tau/2 ||
