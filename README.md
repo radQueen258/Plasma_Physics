@@ -25,6 +25,6 @@ java Main
 ## 📂 Output  
 Generates CSV files named:  
 - `results_[time].csv`  
-For your convenience I advise that you rename them like I did so you can better use along with the Python code here: 
+For your convenience I advise that you rename them like I did so you can better use along with the Python code here: https://github.com/radQueen258/HeatComparisonPlots.git
 
 ---
