@@ -28,11 +28,11 @@ public class Main {
 
 //            CASE 1: Insulation inside (left side)
 
-            if (x[i] <= 0.35) {
-                lambda[i] = 0.045/50/85000; // Insulation
-            } else {
-                lambda[i] = 0.64/1600/840;  // Regular wall
-            }
+//            if (x[i] <= 0.35) {
+//                lambda[i] = 0.045/50/85000; // Insulation
+//            } else {
+//                lambda[i] = 0.64/1600/840;  // Regular wall
+//            }
 
 //            CASE 2: Insulation outside (right side)
             if (x[i] <= 0.35) {
@@ -53,7 +53,7 @@ public class Main {
             HeatConduction.solveImplicit(n, h, x, A, B, C, F, mu1, kappa1, mu2, kappa2,
                     lambda, y, tau, y_old);
 
-            HeatConduction.solveExplicit(n, h, lambda, y, tau, y_old);
+//            HeatConduction.solveExplicit(n, h, lambda, y, tau, y_old);
 
 //               Save results at spec. times
             if (Math.abs(currentTime - 3000) < tau/2 ||
