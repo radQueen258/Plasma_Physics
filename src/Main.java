@@ -41,28 +41,35 @@ public class Main {
                 lambda[i] = 0.045/50/85000; // Insulation
             }
 
+        }
 //            Boundary conditions
-            double mu1 = 30, kappa1 = 0;
-            double mu2 = -30, kappa2 = 0;
+        double mu1 = 30, kappa1 = 0;
+        double mu2 = -30, kappa2 = 0;
 
 //            Time stepping
-            for (double currentTime = 0; currentTime <= timeEnd;
-            currentTime += tau) {
+        for (double currentTime = 0; currentTime <= timeEnd;
+             currentTime += tau) {
 //                Choose your solver:
-                HeatConduction.solveImplicit(n, h, x, A, B, C, F, mu1, kappa1, mu2, kappa2,
-                        lambda, y, tau, y_old);
+            HeatConduction.solveImplicit(n, h, x, A, B, C, F, mu1, kappa1, mu2, kappa2,
+                    lambda, y, tau, y_old);
 
-                HeatConduction.solveExplicit(n, h, lambda, y, tau, y_old);
+            HeatConduction.solveExplicit(n, h, lambda, y, tau, y_old);
 
 //               Save results at spec. times
-                if (Math.abs(currentTime - 3000) < tau/2 ||
-                        Math.abs(currentTime - 3000) < tau/2 ||
-                        Math.abs(currentTime - 30000) < tau/2 ||
-                        Math.abs(currentTime - 3000000) < tau/2 ||
-                        Math.abs(currentTime - 30000000) < tau/2 ) {
-                    HeatConduction.saveResults(String.format());
-                }
+            if (Math.abs(currentTime - 3000) < tau/2 ||
+                    Math.abs(currentTime - 3000) < tau/2 ||
+                    Math.abs(currentTime - 30000) < tau/2 ||
+                    Math.abs(currentTime - 3000000) < tau/2 ||
+                    Math.abs(currentTime - 30000000) < tau/2 ) {
+                HeatConduction.saveResults(String.format("results_%.0f.csv", currentTime), x, y);
             }
+            //                Updating for the next time step
+            System.arraycopy(y, 0, y_old, 0, n+1);
+        }
+
+        //    Final output
+        for (int i = 0; i <= n; i ++) {
+            System.out.printf("x=%.2f, T=%.2f\n", x[i], y[i]);
         }
     }
 }
