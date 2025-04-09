@@ -1,3 +1,6 @@
+import java.io.FileWriter;
+import java.io.IOException;
+
 public class HeatConduction {
 //    Thomas algorithm
     private static void solveMatrix (int n, double[] a, double[] b, double[] c, double[] f,
@@ -34,5 +37,31 @@ public class HeatConduction {
             F[i] = - y_old[i] / tau;
         }
         solveMatrix(n, A, B, C, F, mu1, kappa1, mu2, kappa2, y);
+    }
+
+//    Explicit scheme solver
+    private static void solveExplicit (int n, double h, double[] lambda, double[] y, double tau, double[] y_old) {
+        double[] newY = new double[n+1];
+        System.arraycopy(y_old, 0, newY, 0, n+1);
+
+        for (int i = 1; i < n; i++) {
+            double d = tau * (lambda[i] + lambda[i+1]) / (2*h*h);
+            newY[i] = y_old[i] + d * (y_old[i+1] - 2 * y_old[i] + y_old[i-1]);
+        }
+
+//        Apply boundary conditions
+        newY[0] = 30; // Left boundary
+        newY[n] = -30; // Right boundary
+
+        System.arraycopy(newY, 0, y, 0, n+1);
+    }
+
+//    Save the result to a CSV file
+    private static void saveResults (String filename, double[] x, double[] y) throws IOException {
+        FileWriter writer = new FileWriter(filename);
+        for (int i = 0; i < x.length; i ++) {
+            writer.write(String.format("%f,%f\n", x[i], y[i]));
+        }
+        writer.close();
     }
 }
