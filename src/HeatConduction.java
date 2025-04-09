@@ -3,7 +3,7 @@ import java.io.IOException;
 
 public class HeatConduction {
 //    Thomas algorithm
-    private static void solveMatrix (int n, double[] a, double[] b, double[] c, double[] f,
+    public static void solveMatrix (int n, double[] a, double[] b, double[] c, double[] f,
                                      double mu1, double kappa1, double mu2, double kappa2,
                                      double[] y) {
         double[] alpha = new double[n+1];
@@ -27,7 +27,7 @@ public class HeatConduction {
     }
 
     //        Implicit scheme solver
-    private static void solveImplicit (int n, double h, double[] x, double[] A, double[] B,
+    public static void solveImplicit (int n, double h, double[] x, double[] A, double[] B,
                                        double[] C, double[] F, double mu1, double kappa1, double mu2,
                                        double kappa2, double[] lambda, double[] y, double tau, double[] y_old) {
         for (int i = 1; i < n; i++) {
@@ -40,7 +40,7 @@ public class HeatConduction {
     }
 
 //    Explicit scheme solver
-    private static void solveExplicit (int n, double h, double[] lambda, double[] y, double tau, double[] y_old) {
+    public static void solveExplicit (int n, double h, double[] lambda, double[] y, double tau, double[] y_old) {
         double[] newY = new double[n+1];
         System.arraycopy(y_old, 0, newY, 0, n+1);
 
@@ -57,7 +57,7 @@ public class HeatConduction {
     }
 
 //    Save the result to a CSV file
-    private static void saveResults (String filename, double[] x, double[] y) throws IOException {
+    public static void saveResults (String filename, double[] x, double[] y) throws IOException {
         FileWriter writer = new FileWriter(filename);
         for (int i = 0; i < x.length; i ++) {
             writer.write(String.format("%f,%f\n", x[i], y[i]));

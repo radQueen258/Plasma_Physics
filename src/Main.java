@@ -1,15 +1,68 @@
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-public class Main {
-    public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+import java.io.IOException;
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
+public class Main {
+    public static void main(String[] args) throws IOException {
+
+        int n = 10;
+        double timeEnd = 30000000;
+        double L = 0.7; // Wall thickness
+        double h = L / n;
+        double tau = 5000; // Time step (smaller for explicit stability)
+
+        double[] x = new double[n+1];
+        double[] A = new double[n+1];
+        double[] B = new double[n+1];
+        double[] C = new double[n+1];
+        double[] F = new double[n+1];
+        double[] y = new double[n+1];
+        double[] y_old = new double[n+1];
+        double[] lambda = new double[n+1];
+
+        double y0 = -30; // Init temp.
+
+//        Init arrays
+        for (int i = 0; i <= n; i++) {
+            x[i] = h * i;
+            y[i] = 0;
+            y_old[i] = y0;
+
+//            CASE 1: Insulation inside (left side)
+
+            if (x[i] <= 0.35) {
+                lambda[i] = 0.045/50/85000; // Insulation
+            } else {
+                lambda[i] = 0.64/1600/840;  // Regular wall
+            }
+
+//            CASE 2: Insulation outside (right side)
+            if (x[i] <= 0.35) {
+                lambda[i] = 0.64/1600/840; // Regular wall
+            } else {
+                lambda[i] = 0.045/50/85000; // Insulation
+            }
+
+//            Boundary conditions
+            double mu1 = 30, kappa1 = 0;
+            double mu2 = -30, kappa2 = 0;
+
+//            Time stepping
+            for (double currentTime = 0; currentTime <= timeEnd;
+            currentTime += tau) {
+//                Choose your solver:
+                HeatConduction.solveImplicit(n, h, x, A, B, C, F, mu1, kappa1, mu2, kappa2,
+                        lambda, y, tau, y_old);
+
+                HeatConduction.solveExplicit(n, h, lambda, y, tau, y_old);
+
+//               Save results at spec. times
+                if (Math.abs(currentTime - 3000) < tau/2 ||
+                        Math.abs(currentTime - 3000) < tau/2 ||
+                        Math.abs(currentTime - 30000) < tau/2 ||
+                        Math.abs(currentTime - 3000000) < tau/2 ||
+                        Math.abs(currentTime - 30000000) < tau/2 ) {
+                    HeatConduction.saveResults(String.format());
+                }
+            }
         }
     }
 }
